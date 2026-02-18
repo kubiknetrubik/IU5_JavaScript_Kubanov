@@ -1,0 +1,84 @@
+/* опишем базовый стиль кнопки калькулятора */
+body > div {
+    position: relative;
+}
+.my-btn { 
+  margin-right: 5px;           /* задаем отступ от кнопки справа */
+  margin-top: 5px;             /* задаем отступ от кнопки сверху*/
+  width: 50px;                 /* задаем ширину кнопки */
+  height: 50px;                /* задаем высоту кнопки */
+  border-radius: 50%;          /* округляем кнопку */
+  border: none;                /* отключаем обводку */
+  background: #fdf8f7;         /* задаем серый цвет кнопки */
+  color: #000000;                /* задаем белый цвет текста внутри кнопки */
+  font-size: 1.5rem;           /* увеличим размер шрифта */
+  font-family: Arial, Helvetica, sans-serif; /* сменим шрифт */
+  cursor: pointer;             /* при наведении на кнопку курсор будет изменен
+                                  со стрелки на 'указательный палец' */
+  user-select: none;  
+  border: 1px solid #000000; 
+  box-shadow: 0 4px 0 #f4cbc4;
+  border-color: #f4cbc4;
+} 
+
+/* hover - это состояние элемента, когда на него наведен курсор */
+.my-btn:hover {
+  background: darkgray; /* при наведение курсора на кнопку, она будет окрашена в серый */
+}
+
+/* active - это состояние активации элемента. В случае кнопки - нажатие на нее */
+.my-btn:active {
+  filter: brightness(130%); /* увеличим интенсивность цвета для эффекта вспышки */
+}
+
+/* селектор для кнопок первостепенных операций */
+.my-btn.primary { 
+  background: #ff4229; /* цвет кнопки оранжевый */
+  color: #ffffff;
+  box-shadow: 0 4px 0 #e32c03;
+  border-color: #e32c03;
+}
+
+/* селектор для кнопок второстепенных операций */
+.my-btn.secondary { 
+  background: #fdfdfd;
+  color: #000000;
+  box-shadow: 0 4px 0 #d2d2d2;
+  border-color: #d2d2d2;
+}
+
+/* селектор для кнопки расчета выражения (=) */
+.my-btn.execute {
+  background: #74ff29; /* цвет кнопки оранжевый */
+  color: #ffffff;
+  box-shadow: 0 4px 0 #56bd1e;
+  border-color: #56bd1e; 
+  width: 110px;          /* сделаем кнопку шире других */
+  border-radius: 34px;   /* подкорректируем округлость */
+}
+
+.result { 
+  width: 220px;
+  height: 50px;
+  margin-bottom: 15px;       
+  padding-right: 10px;       
+  background: rgb(255, 255, 255);
+  text-align: right;        
+  color: #000000;    
+  font-size: 1.5rem;
+  font-family: Arial, Helvetica, sans-serif;
+  border: 1px solid #000000;
+  border-radius: 25px; 
+ 
+}
+.corner-image {
+    position: absolute;
+    top: 5px;     
+    right: 1125px;    
+    z-index: 10;    
+}
+.corner-image img {
+    width: 40px;    
+    height: auto;  
+    display: block; 
+}
