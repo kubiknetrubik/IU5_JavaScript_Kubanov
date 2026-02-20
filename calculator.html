@@ -8,52 +8,79 @@
 </head>
 
 <body>
-  <div> <!-- div - это базовый html-контейнер, который может содержать в себе другие html-элементы. -->
-    <div class="corner-image">
-      <img src="metro.png" alt="Логотип">
-    </div>
-    <!-- блок с экраном калькулятора, где будет выводиться результат вычислений. -->
-    <div id="result" class="result">
-      0
-    </div>
-
-    <!-- блок с кнопками калькулятора. -->
-    <div>
-      <!--горизонтальный ряд из четырех кнопок-->
-      <div>  
-        <button id="btn_op_clear" class="my-btn secondary">C</button>    <!-- про тэг кнопки: https://www.w3schools.com/tags/tag_button.asp -->
-        <button id="btn_op_sign" class="my-btn secondary">+/-</button>
-        <button id="btn_op_percent" class="my-btn secondary">%</button>
-        <button id="btn_op_div" class="my-btn secondary">/</button>
+  <div class="overlay" id="overlay"></div>
+  <div class="sidebar" id="sidebar">
+    <button id="scheme" class="nav-btn">Схема метро</button>
+    <button id="calc" class="nav-btn">Калькулятор</button>
+    <button id="i" class="nav-btn">Разработчик</button>
+  </div>
+  <div class="corner-image">
+    <img src="metron.png" alt="Логотип">
+  </div>
+  <div class="table-image">
+    <img src="https://mosmetro.ru/static/new-cms-backend/banners/c9cb0315-569b-11f0-ba8f-89d139ee35ff" alt="">
+  </div>
+  <button id="menubutton" class="menu-button">
+    <img src="button.png" alt="button">
+  </button>
+  <div id="content_scheme" class="tab-content" style="display: block;">
+    <img src="metromap.jpg" alt="map">
+  </div>
+  <div id="content_i" class="tab-content" style="display: block;">
+    <a href="https://github.com/kubiknetrubik">Я</a>
+  </div>
+  <div id="content_calc" class="tab-content" style="display: block;">
+    <div class="calculator">
+      <!-- div - это базовый html-контейнер, который может содержать в себе другие html-элементы. -->
+      <!-- блок с экраном калькулятора, где будет выводиться результат вычислений. -->
+      <div id="result" class="result">
+        0
       </div>
 
+      <!-- блок с кнопками калькулятора. -->
       <div>
-        <button id="btn_digit_7" class="my-btn">7</button>
-        <button id="btn_digit_8" class="my-btn">8</button>
-        <button id="btn_digit_9" class="my-btn">9</button>
-        <button id="btn_op_mult" class="my-btn primary">x</button>
-      </div>
+        <!--горизонтальный ряд из четырех кнопок-->
+        <div>
+          <button id="btn_op_clear" class="my-btn secondary">C</button>
+          <!-- про тэг кнопки: https://www.w3schools.com/tags/tag_button.asp -->
+          <button id="btn_op_sign" class="my-btn secondary">+/-</button>
+          <button id="btn_op_percent" class="my-btn secondary">%</button>
+          <button id="btn_op_div" class="my-btn secondary">/</button>
+        </div>
 
-      <div>
-        <button id="btn_digit_4" class="my-btn">4</button>
-        <button id="btn_digit_5" class="my-btn">5</button>
-        <button id="btn_digit_6" class="my-btn">6</button>
-        <button id="btn_op_minus" class="my-btn primary">-</button>
-      </div>
+        <div>
+          <button id="btn_digit_7" class="my-btn">7</button>
+          <button id="btn_digit_8" class="my-btn">8</button>
+          <button id="btn_digit_9" class="my-btn">9</button>
+          <button id="btn_op_mult" class="my-btn primary">x</button>
+        </div>
 
-      <div>
-        <button id="btn_digit_1" class="my-btn">1</button>
-        <button id="btn_digit_2" class="my-btn">2</button>
-        <button id="btn_digit_3" class="my-btn">3</button>
-        <button id="btn_op_plus" class="my-btn primary">+</button>
-      </div>
+        <div>
+          <button id="btn_digit_4" class="my-btn">4</button>
+          <button id="btn_digit_5" class="my-btn">5</button>
+          <button id="btn_digit_6" class="my-btn">6</button>
+          <button id="btn_op_minus" class="my-btn primary">-</button>
+        </div>
 
-      <div>
-        <button id="btn_digit_0" class="my-btn">0</button>
-        <button id="btn_digit_dot" class="my-btn">.</button>
-        <button id="btn_op_equal" class="my-btn execute">=</button>
+        <div>
+          <button id="btn_digit_1" class="my-btn">1</button>
+          <button id="btn_digit_2" class="my-btn">2</button>
+          <button id="btn_digit_3" class="my-btn">3</button>
+          <button id="btn_op_plus" class="my-btn primary">+</button>
+        </div>
+
+        <div>
+          <button id="btn_digit_0" class="my-btn">0</button>
+          <button id="btn_digit_dot" class="my-btn">.</button>
+          <button id="btn_op_equal" class="my-btn execute">=</button>
+        </div>
       </div>
     </div>
   </div>
+  <div id="content_i" class="tab-content" style="display: block;">
+    <p>Здесь будет схема метро</p>
+  </div>
+
 </body>
+
 </html>

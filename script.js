@@ -4,7 +4,9 @@ window.onload = function () {
     let b = ''           // Второе число
     let expressionResult = ''  // Результат вычисления
     let selectedOperation = null  // Выбранная операция
-
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.style.display = 'none');
+    document.getElementById("content_calc").style.display = 'block';
     // Получаем доступ к экрану калькулятора в поле вывода
     const outputElement = document.getElementById("result")
 
@@ -97,5 +99,51 @@ window.onload = function () {
 
         // Показываем результат на экране
         outputElement.innerHTML = a
+    }
+    document.getElementById("btn_op_percent").onclick = function () {
+        if (!selectedOperation) {
+            if (a !== '') {
+                a = (parseFloat(a) / 100).toString();
+                outputElement.innerHTML = a;
+            }
+        } else {
+            if (b !== '') {
+                b = (parseFloat(b) / 100).toString();
+                outputElement.innerHTML = b;
+            }
+        }
+    };
+    document.getElementById("btn_op_sign").onclick = function () {
+        if (!selectedOperation) {
+            if (a !== '') {
+                a = (parseFloat(a) * -1).toString();
+                outputElement.innerHTML = a;
+            }
+        } else {
+            if (b !== '') {
+                b = (parseFloat(b) * -1).toString();
+                outputElement.innerHTML = b;
+            }
+        }
+    };
+    document.getElementById("menubutton").onclick=function(){
+        document.getElementById("sidebar").classList.add('open');
+        document.getElementById("overlay").classList.add('show');
+    }
+    document.getElementById("overlay").onclick=function(){
+        document.getElementById("sidebar").classList.remove('open');
+        document.getElementById("overlay").classList.remove('show');
+    }
+    document.getElementById("scheme").onclick=function(){
+        tabs.forEach(tab => tab.style.display = 'none');
+        document.getElementById("content_scheme").style.display = 'block';
+    }
+    document.getElementById("calc").onclick=function(){
+        tabs.forEach(tab => tab.style.display = 'none');
+        document.getElementById("content_calc").style.display = 'block';
+    }
+    document.getElementById("i").onclick=function(){
+        tabs.forEach(tab => tab.style.display = 'none');
+        document.getElementById("content_i").style.display = 'block';
     }
 };
