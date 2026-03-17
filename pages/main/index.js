@@ -40,6 +40,17 @@ export class MainPage {
             <div id="logo-container"></div>
             <div id="buttons-container" class="d-flex justify-content-center gap-2 mt-2"></div>
         </div>
+        <div id="analyze" class="container mt-3 text-center">
+            <button id="analyze-network-btn" class="btn btn mt-2">
+                Анализ нагрузки сети
+            </button>
+            <button id="fast-name" class="btn btn mt-2">
+                Социальная карта
+            </button>
+            <div id="load-report-display"></div>
+            <div id="load-fast-name"></div>
+
+        </div>
 
         <div id="carousel-wrapper" class="mt-4">
             <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" style="max-width: 600px; margin: 0 auto;">
@@ -74,6 +85,57 @@ export class MainPage {
             this.render();
         }
     }
+    calculateNetworkLoad() {
+        const matrix = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ];
+        const report = {
+            title: "Отчет по осевой нагрузке хабов",
+            value: 0,
+            timestamp: new Date().toLocaleTimeString()
+        };
+        let i = 0;
+        const n = matrix.length;
+        while (i < n) {
+            report.value += matrix[i][i];
+            report.value += matrix[i][n - 1 - i];
+            i++;
+        }
+        if (n % 2 !== 0) {
+            const mid = Math.floor(n / 2);
+            report.value -= matrix[mid][mid];
+        }
+        const display = document.getElementById('load-report-display');
+        if (display) {
+            display.innerHTML = `
+            <div class="alert info mt-2">
+                <strong>${report.title}</strong><br>
+                Показатель: ${report.value} ед.<br>
+                <small>Обновлено: ${report.timestamp}</small>
+            </div>
+        `;
+        }
+    }
+    formatStationNames(inputString) {
+        let words = inputString.split(" ");
+        words = words.map(word => {
+            let sortedChars = word.toLowerCase().split("").sort().join("");
+            return sortedChars.slice(0, 1).toUpperCase() + sortedChars.slice(1);
+        });
+        words.sort();
+        const display = document.getElementById('load-fast-name');
+        if (display) {
+            display.innerHTML = `
+            <div class="alert info mt-2">
+                <strong>Название для быстрого поиска</strong><br>
+                ${inputString}: ${words.join(" ")} <br>
+
+            </div>
+        `;
+        }
+    }
 
     render() {
         this.parent.innerHTML = '';
@@ -87,6 +149,8 @@ export class MainPage {
         badd.render(MainPage.cardsData[0], this.clickAdd.bind(this));
         const deleteLastBtn = new DeleteLastComponent(buttonsRoot);
         deleteLastBtn.render(this.clickDeleteLast.bind(this));
+        document.getElementById('analyze-network-btn').addEventListener('click', () => this.calculateNetworkLoad());
+        document.getElementById('fast-name').addEventListener('click', (e) => this.formatStationNames(e.target.innerText));
         MainPage.cardsData.forEach((item, index) => {
             const productCard = new ProductCardComponent(carouselRoot);
             productCard.render(item, this.clickCard.bind(this), index === 0);
