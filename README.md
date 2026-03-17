@@ -92,24 +92,7 @@
     }
 
 ```
-4. Цифры в result посрередине
-```css
-.result {
-  width: 220px;
-  height: 50px;
-  margin-bottom: 15px;
-  padding-right: 10px;
-  background: rgb(255, 255, 255);
-  text-align: right;
-  line-height: 50px;
-  color: #000000;
-  font-size: 1.5rem;
-  font-family: Arial, Helvetica, sans-serif;
-  border: 1px solid #000000;
-  border-radius: 25px;
 
-}
-```
 ## План
 
 1. Инструменты для работы
