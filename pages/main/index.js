@@ -16,7 +16,7 @@ export class MainPage {
             src: "../../assets/ediniy-face.png",
             title: "Билет «Единый»",
             text: "Право на одну поездку"
-            },
+        },
         {
             id: 3,
             src: "../../assets/social-card.png",
@@ -35,7 +35,25 @@ export class MainPage {
     }
 
     getHTML() {
-        return `<div id="main-page" class="d-flex flex-wrap"></div>`;
+        return `
+        <div id="top-controls" class="container mt-3 text-center">
+            <div id="logo-container"></div>
+            <div id="buttons-container" class="d-flex justify-content-center gap-2 mt-2"></div>
+        </div>
+
+        <div id="carousel-wrapper" class="mt-4">
+            <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" style="max-width: 600px; margin: 0 auto;">
+                <div class="carousel-inner" id="carousel-items-container">
+                    </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%;"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%;"></span>
+                </button>
+            </div>
+        </div>
+    `;
     }
 
     clickCard(e) {
@@ -47,9 +65,8 @@ export class MainPage {
     clickAdd(data) {
         const newData = { ...data, id: MainPage.nextId++ };
         MainPage.cardsData.push(newData);
-        
-        const productCard = new ProductCardComponent(this.pageRoot);
-        productCard.render(newData, this.clickCard.bind(this));
+        this.render();
+
     }
     clickDeleteLast() {
         if (MainPage.cardsData.length > 0) {
@@ -60,20 +77,19 @@ export class MainPage {
 
     render() {
         this.parent.innerHTML = '';
-        const html = this.getHTML();
-        this.parent.insertAdjacentHTML('beforeend', html);
-        
-        const logo = new LogoComponent(this.pageRoot);
+        this.parent.insertAdjacentHTML('beforeend', this.getHTML());
+        const logoRoot = document.getElementById('logo-container');
+        const buttonsRoot = document.getElementById('buttons-container');
+        const carouselRoot = document.getElementById('carousel-items-container');
+        const logo = new LogoComponent(logoRoot);
         logo.render();
-
-        const badd = new ButtonComponent(this.pageRoot);
+        const badd = new ButtonComponent(buttonsRoot);
         badd.render(MainPage.cardsData[0], this.clickAdd.bind(this));
-
-        const deleteLastBtn = new DeleteLastComponent(this.pageRoot);
+        const deleteLastBtn = new DeleteLastComponent(buttonsRoot);
         deleteLastBtn.render(this.clickDeleteLast.bind(this));
-        MainPage.cardsData.forEach((item) => {
-            const productCard = new ProductCardComponent(this.pageRoot);
-            productCard.render(item, this.clickCard.bind(this));
+        MainPage.cardsData.forEach((item, index) => {
+            const productCard = new ProductCardComponent(carouselRoot);
+            productCard.render(item, this.clickCard.bind(this), index === 0);
         });
     }
 }
