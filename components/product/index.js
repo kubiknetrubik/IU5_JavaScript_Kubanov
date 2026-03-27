@@ -12,7 +12,6 @@ export class ProductComponent {
         return words.join(" ");
     }
     getHTML(data) {
-        // Вызываем функцию для заголовка
         const formattedTitle = this.formatStationNames(data.title);
 
         return `

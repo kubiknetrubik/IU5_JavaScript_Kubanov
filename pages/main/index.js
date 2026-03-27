@@ -86,7 +86,7 @@ export class MainPage {
         }
     }
     calculateNetworkLoad() {
-        const matrix = [
+        const stations = [
             [1, 2, 3],
             [4, 5, 6],
             [7, 8, 9]
@@ -97,15 +97,15 @@ export class MainPage {
             timestamp: new Date().toLocaleTimeString()
         };
         let i = 0;
-        const n = matrix.length;
+        const n = stations.length;
         while (i < n) {
-            report.value += matrix[i][i];
-            report.value += matrix[i][n - 1 - i];
+            report.value += stations[i][i];
+            report.value += stations[i][n - 1 - i];
             i++;
         }
         if (n % 2 !== 0) {
             const mid = Math.floor(n / 2);
-            report.value -= matrix[mid][mid];
+            report.value -= stations[mid][mid];
         }
         const display = document.getElementById('load-report-display');
         if (display) {
