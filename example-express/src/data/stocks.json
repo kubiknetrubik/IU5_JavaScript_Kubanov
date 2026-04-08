@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "src": "https://apps3proxy.mosmetro.tech/webapp-mosmetro/cards/troyka-front.png",
+    "title": "Карта «Тройка»",
+    "text": "Электронная транспортная карта"
+  },
+  {
+    "id": 2,
+    "src": "https://apps3proxy.mosmetro.tech/webapp-mosmetro/cards/ediniy-face.png",
+    "title": "Билет «Единый»",
+    "text": "Право на одну поездку"
+  },
+  {
+    "id": 3,
+    "src": "https://apps3proxy.mosmetro.tech/webapp-mosmetro/social-cards/social-card-beneficiary-05.07.24.png",
+    "title": "Карта москвича",
+    "text": "Льготный проезд для студентов"
+  }
+]
