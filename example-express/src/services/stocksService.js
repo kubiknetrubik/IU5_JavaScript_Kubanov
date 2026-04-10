@@ -8,11 +8,16 @@ const init = (filePath) => {
     dataFilePath = filePath;
 };
 
-const findAll = (title) => {
+const findAll = (title,text) => {
     const stocks = fileService.readData(dataFilePath);
     if (title) {
         return stocks.filter(stock => 
             stock.title.toLowerCase().includes(title.toLowerCase())
+        );
+    }
+    if (text){
+        return stocks.filter(stock => 
+            stock.text.toLowerCase().includes(text.toLowerCase())
         );
     }
     return stocks;
