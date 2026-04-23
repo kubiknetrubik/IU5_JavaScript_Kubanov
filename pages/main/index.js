@@ -3,6 +3,8 @@ import { ProductCardComponent } from "../../components/product-card/index.js";
 import { ProductPage } from "../product/index.js";
 import { LogoComponent } from "../../components/corner-logo/index.js";
 import { DeleteLastComponent } from "../../components/button-del/index.js";
+import { ajax } from "../../modules/ajax.js";
+import { stockUrls } from "../../modules/stockUrls.js";
 export class MainPage {
     static cardsData = [
         {
@@ -28,6 +30,24 @@ export class MainPage {
 
     constructor(parent) {
         this.parent = parent;
+        this.cardsData2 = [];
+    }
+    getData() {
+        ajax.get(stockUrls.getStocks(), (data) => {
+            console.log('Данные с сервера:', data);
+            this.cardsData2 = data;
+            this.renderData();
+        });
+    }
+    renderData() {
+        const container = document.getElementById('carousel-items-container');
+        if (!container) return;
+        container.innerHTML = ''; 
+
+        this.cardsData2.forEach((item, index) => {
+            const productCard = new ProductCardComponent(container);
+            productCard.render(item, this.clickCard.bind(this), index === 0);
+        });
     }
 
     get pageRoot() {
@@ -87,9 +107,6 @@ export class MainPage {
         badd.render(MainPage.cardsData[0], this.clickAdd.bind(this));
         const deleteLastBtn = new DeleteLastComponent(buttonsRoot);
         deleteLastBtn.render(this.clickDeleteLast.bind(this));
-        MainPage.cardsData.forEach((item, index) => {
-            const productCard = new ProductCardComponent(carouselRoot);
-            productCard.render(item, this.clickCard.bind(this), index === 0);
-        });
+        this.getData();
     }
 }
