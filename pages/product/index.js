@@ -5,18 +5,18 @@ import { ajax } from "../../modules/ajax.js";
 import { stockUrls } from "../../modules/stockUrls.js";
 export class ProductPage {
     constructor(parent, id) {
-        this.parent = parent
-        this.id = id
+        this.parent = parent;
+        this.id = id;
     }
 
     getData() {
-    ajax.get(stockUrls.getStockById(this.id), (data) => {
-        this.renderData(data);
-    })
+        ajax.get(stockUrls.getStockById(this.id), (data) => {
+            this.renderData(data);
+        })
     }
     renderData(item) {
-    const product = new ProductComponent(this.pageRoot)
-    product.render(item)
+        const product = new ProductComponent(this.pageRoot)
+        product.render(item);
     }
 
     get pageRoot() {

@@ -5,28 +5,9 @@ import { LogoComponent } from "../../components/corner-logo/index.js";
 import { DeleteLastComponent } from "../../components/button-del/index.js";
 import { ajax } from "../../modules/ajax.js";
 import { stockUrls } from "../../modules/stockUrls.js";
+import { AddCardModal } from "../../components/add-card-modal/index.js";
 export class MainPage {
-    static cardsData = [
-        {
-            id: 1,
-            src: "../../assets/troyka-front.png",
-            title: "Карта «Тройка»",
-            text: "Электронная транспортная карта"
-        },
-        {
-            id: 2,
-            src: "../../assets/ediniy-face.png",
-            title: "Билет «Единый»",
-            text: "Право на одну поездку"
-        },
-        {
-            id: 3,
-            src: "../../assets/social-card.png",
-            title: "Карта москвича",
-            text: "Льготный проезд для студентов"
-        },
-    ];
-    static nextId = 4;
+   
 
     constructor(parent) {
         this.parent = parent;
@@ -34,7 +15,6 @@ export class MainPage {
     }
     getData() {
         ajax.get(stockUrls.getStocks(), (data) => {
-            console.log('Данные с сервера:', data);
             this.cardsData2 = data;
             this.renderData();
         });
@@ -81,18 +61,12 @@ export class MainPage {
         const productPage = new ProductPage(this.parent, cardId);
         productPage.render();
     }
-
-    clickAdd(data) {
-        const newData = { ...data, id: MainPage.nextId++ };
-        MainPage.cardsData.push(newData);
-        this.render();
-
-    }
     clickDeleteLast() {
-        if (MainPage.cardsData.length > 0) {
-            MainPage.cardsData.pop();
-            this.render();
-        }
+        if (this.cardsData2.length === 0) return;
+        const lastId = this.cardsData2[this.cardsData2.length - 1].id;
+        ajax.delete(stockUrls.removeStockById(lastId), () => {
+            this.getData();
+        });
     }
 
     render() {
@@ -104,7 +78,12 @@ export class MainPage {
         const logo = new LogoComponent(logoRoot);
         logo.render();
         const badd = new ButtonComponent(buttonsRoot);
-        badd.render(MainPage.cardsData[0], this.clickAdd.bind(this));
+        badd.render(null, () => {
+            const modal = new AddCardModal(() => {
+                this.getData();
+            });
+            modal.show();
+        });
         const deleteLastBtn = new DeleteLastComponent(buttonsRoot);
         deleteLastBtn.render(this.clickDeleteLast.bind(this));
         this.getData();

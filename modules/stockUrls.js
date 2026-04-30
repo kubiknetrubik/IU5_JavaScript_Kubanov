@@ -15,11 +15,11 @@ class StockUrls {
         return `${this.baseUrl}/stocks`;
     }
 
-    removeStockById() {
+    removeStockById(id) {
         return `${this.baseUrl}/stocks/${id}`;
     }
 
-    updateStockById() {
+    updateStockById(id) {
         return `${this.baseUrl}/stocks/${id}`;
     }
 }
