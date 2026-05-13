@@ -9,10 +9,13 @@ export class ProductPage {
         this.id = id;
     }
 
-    getData() {
-        ajax.get(stockUrls.getStockById(this.id), (data) => {
+    async getData() {
+        try {
+            const { data } = await ajax.get(stockUrls.getStockById(this.id));
             this.renderData(data);
-        })
+        } catch (e) {
+            console.error("Ошибка получения товара:", e);
+    }
     }
     renderData(item) {
         const product = new ProductComponent(this.pageRoot)

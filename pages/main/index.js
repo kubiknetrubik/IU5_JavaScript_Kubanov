@@ -13,11 +13,14 @@ export class MainPage {
         this.parent = parent;
         this.cardsData2 = [];
     }
-    getData() {
-        ajax.get(stockUrls.getStocks(), (data) => {
+    async getData() {
+        try {
+            const { data } = await ajax.get(stockUrls.getStocks());
             this.cardsData2 = data;
             this.renderData();
-        });
+        } catch (e) {
+            console.error("Ошибка при получении данных:", e);
+        }
     }
     renderData() {
         const container = document.getElementById('carousel-items-container');
@@ -61,12 +64,16 @@ export class MainPage {
         const productPage = new ProductPage(this.parent, cardId);
         productPage.render();
     }
-    clickDeleteLast() {
+    async clickDeleteLast() {
         if (this.cardsData2.length === 0) return;
+    
         const lastId = this.cardsData2[this.cardsData2.length - 1].id;
-        ajax.delete(stockUrls.removeStockById(lastId), () => {
-            this.getData();
-        });
+        try {
+            await ajax.delete(stockUrls.removeStockById(lastId));
+            await this.getData();
+        } catch (e) {
+            console.error("Ошибка при удалении:", e);
+        }
     }
 
     render() {
