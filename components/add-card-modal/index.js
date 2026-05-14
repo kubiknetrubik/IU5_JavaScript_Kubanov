@@ -7,6 +7,7 @@ export class AddCardModal {
         this.modalElement = null;
         this.modalInstance = null;
     }
+
     getHTML() {
         return `
             <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -44,12 +45,15 @@ export class AddCardModal {
             </div>
         `;
     }
+
     show() {
         document.body.insertAdjacentHTML('beforeend', this.getHTML());
         this.modalElement = document.getElementById('addCardModal');
         this.modalInstance = new bootstrap.Modal(this.modalElement);
+        
         const saveBtn = document.getElementById('saveCardBtn');
         saveBtn.addEventListener('click', this.handleSave.bind(this));
+        
         this.modalElement.addEventListener('hidden.bs.modal', () => {
             this.modalElement.remove();
         });
@@ -57,12 +61,12 @@ export class AddCardModal {
         this.modalInstance.show();
     }
 
-    handleSave() {
+    // Делаем метод асинхронным
+    async handleSave() {
         const title = document.getElementById('titleInput').value.trim();
         const text = document.getElementById('textInput').value.trim();
         const src = document.getElementById('srcInput').value.trim();
 
-  
         this.clearErrors();
 
         let isValid = true;
@@ -94,10 +98,21 @@ export class AddCardModal {
         if (!isValid) return;
 
         const newCard = { title, text, src };
-        ajax.post(stockUrls.createStock(), newCard, () => {
+
+        try {
+            // Используем await вместо коллбека
+            await ajax.post(stockUrls.createStock(), newCard);
+            
             this.modalInstance.hide();
-            if (this.onSuccess) this.onSuccess();
-        });
+            
+            if (this.onSuccess) {
+                this.onSuccess();
+            }
+        } catch (error) {
+            console.error('Ошибка при сохранении карточки:', error);
+            // Тут можно вывести общую ошибку для пользователя, если запрос не прошел
+            alert('Не удалось сохранить карточку. Попробуйте позже.');
+        }
     }
 
     clearErrors() {

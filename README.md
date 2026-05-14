@@ -1,4 +1,4 @@
-# ЛР №5. Добаление AJAX запросов к API.
+# ЛР №6. Знакомство с promise и fetch, борка клиентской части
 
 **Кубанов Сергей ИУ5-44Б**
 
@@ -12,7 +12,11 @@
 - [Задание](#задание)
 
 ## Цель данной лабораторной работы 
-Цель данной лабораторной работы - взаимодействие с внешним API через XMLHttpRequest. В ходе выполнения работы, вам предстоит ознакомиться с кодом реализации простого взаимодействия с внешним API, получение данных и вывод их в интерфейс пользователя, и затем выполнить задания по варианту.
+Лабораторная состоит из 2-х частей:
+
+Первая часть данной лабораторной работы заключается в изменении механизма взаимодействия с внешним API: в прошлой лабораторной работе использовался XMLHttpRequest, в этой - современный метод fetch. В ходе выполнения работы предстоит познакомиться с кратким полезным теоретическим материалом, кодом реализации простого взаимодействия с внешним API, получением данных и выводом их в интерфейс пользователя, и выполнить задания по варианту.
+
+Вторая часть лабораторной работы заключается в сборке клиентской части приложения: необходимо "сбилдить" клиентскую часть (ЛР №3) с помощью системы сборки, а также добавить в серверную часть (ЛР №4) возможность раздачи клиентской части в качестве статики во избежание проблем с CORS.
 
 ## Тема
 Проезд по транспортной карте «90 минут».
@@ -21,134 +25,47 @@
 [Метро](https://mosmetro.ru/)
 
 ## Дополнительные задания
-1. Добавлена кнопка добавки новой карточки на сервер.
+1. Переделаны запросы через async, await, fetch.
 ```js
- import { ajax } from "../../modules/ajax.js";
-import { stockUrls } from "../../modules/stockUrls.js";
-
-export class AddCardModal {
-    constructor(onSuccess) {
-        this.onSuccess = onSuccess; 
-        this.modalElement = null;
-        this.modalInstance = null;
-    }
-    getHTML() {
-        return `
-            <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalLabel">Добавление новой карточки</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="addCardForm">
-                                <div class="mb-3">
-                                    <label for="titleInput" class="form-label">Название *</label>
-                                    <input type="text" class="form-control" id="titleInput" maxlength="50">
-                                    <div id="titleError" class="invalid-feedback"></div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="textInput" class="form-label">Описание *</label>
-                                    <textarea class="form-control" id="textInput" maxlength="200"></textarea>
-                                    <div id="textError" class="invalid-feedback"></div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="srcInput" class="form-label">URL изображения *</label>
-                                    <input type="text" class="form-control" id="srcInput" maxlength="200">
-                                    <div id="srcError" class="invalid-feedback"></div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                            <button type="button" class="btn btn-primary" id="saveCardBtn">Сохранить</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-    show() {
-        document.body.insertAdjacentHTML('beforeend', this.getHTML());
-        this.modalElement = document.getElementById('addCardModal');
-        this.modalInstance = new bootstrap.Modal(this.modalElement);
-        const saveBtn = document.getElementById('saveCardBtn');
-        saveBtn.addEventListener('click', this.handleSave.bind(this));
-        this.modalElement.addEventListener('hidden.bs.modal', () => {
-            this.modalElement.remove();
-        });
-
-        this.modalInstance.show();
-    }
-
-    handleSave() {
-        const title = document.getElementById('titleInput').value.trim();
-        const text = document.getElementById('textInput').value.trim();
-        const src = document.getElementById('srcInput').value.trim();
-
-  
-        this.clearErrors();
-
-        let isValid = true;
-
-        if (title === '') {
-            this.showError('titleError', 'Заголовок не может быть пустым');
-            isValid = false;
-        } else if (title.length > 50) {
-            this.showError('titleError', 'Максимум 50 символов');
-            isValid = false;
+class Ajax {
+    async get(url) {
+        try {
+            const response = await fetch(url);
+            return await this._handleResponse(response);
+        } catch (error) {
+            console.error('Fetch error (GET):', error);
+            throw error;
         }
-
-        if (text === '') {
-            this.showError('textError', 'Описание не может быть пустым');
-            isValid = false;
-        } else if (text.length > 200) {
-            this.showError('textError', 'Максимум 200 символов');
-            isValid = false;
-        }
-
-        if (src === '') {
-            this.showError('srcError', 'URL изображения не может быть пустым');
-            isValid = false;
-        } else if (src.length > 200) {
-            this.showError('srcError', 'Максимум 200 символов');
-            isValid = false;
-        }
-
-        if (!isValid) return;
-
-        const newCard = { title, text, src };
-        ajax.post(stockUrls.createStock(), newCard, () => {
-            this.modalInstance.hide();
-            if (this.onSuccess) this.onSuccess();
-        });
     }
-
-    clearErrors() {
-        const fields = ['titleInput', 'textInput', 'srcInput'];
-        fields.forEach(id => {
-            const input = document.getElementById(id);
-            if (input) input.classList.remove('is-invalid');
-        });
-        const errorDivs = ['titleError', 'textError', 'srcError'];
-        errorDivs.forEach(id => {
-            const div = document.getElementById(id);
-            if (div) div.innerText = '';
-        });
-    }
-
-    showError(errorId, message) {
-        const errorDiv = document.getElementById(errorId);
-        if (errorDiv) {
-            errorDiv.innerText = message;
+    async post(url, data) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            return await this._handleResponse(response);
+        } catch (error) {
+            console.error('Fetch error (POST):', error);
+            throw error;
         }
-        const fieldId = errorId.replace('Error', 'Input');
-        const field = document.getElementById(fieldId);
-        if (field) field.classList.add('is-invalid');
+    }
+    async delete(url) {
+        try {
+            const response = await fetch(url, { method: 'DELETE' });
+            return await this._handleResponse(response);
+        } catch (error) {
+            console.error('Fetch error (DELETE):', error);
+            throw error;
+        }
+    }
+    async _handleResponse(response) {
+        const data = await response.json().catch(() => null);
+        return { data, status: response.status };
     }
 }
 
+export const ajax = new Ajax();
 ```
 ```js
 const badd = new ButtonComponent(buttonsRoot);
@@ -159,15 +76,26 @@ const badd = new ButtonComponent(buttonsRoot);
             modal.show();
         });
 ```
-
+2. Переделано создание запросов
+```js
+async getData() {
+        try {
+            const { data } = await ajax.get(stockUrls.getStocks());
+            this.cardsData2 = data;
+            this.renderData();
+        } catch (e) {
+            console.error("Ошибка при получении данных:", e);
+        }
+    }
+```
 ## План
 
-1. Инструменты для работы.
-2. Что такое XMLHttpRequest.
-3. Работа с API.
-4. API главной страницы с карточками.
-5. API страницы карточки.
-6. Дополнительные материалы.
+1. Введение в Promise.  
+2. Использование Promise.
+3. Что такое async await в JS
+4. Пояснение про fetch и пример использования.
+5. Сборка клиентской части через Vite.
+6. Раздача фронтенда в качестве статики
 
 ## Задание 
-Продолжение Лабораторной работы 3: добавить страницу добавления/редактирования и соответствующие кнопки, подключение к созданному API бэкенду. Запросы XHR, Cors обойти через расширение браузера CORS Unblock. Код 4ой лабораторной НЕ НУЖНО добавлять в ветку по 5ой, в 5ой и 6ой остается только фронтенд, как в 3ей
+Замена коллбеков на промисы, запросы fetch. Собрать файлы фронтенда через bundler, развернуть их на сервере c API. Ветка по 6ой лабораторной остается только с файлами исходного кода, а собранный bundle необходимо добавить в ветку по 4ой лабораторной
