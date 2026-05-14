@@ -67,15 +67,6 @@ class Ajax {
 
 export const ajax = new Ajax();
 ```
-```js
-const badd = new ButtonComponent(buttonsRoot);
-        badd.render(null, () => {
-            const modal = new AddCardModal(() => {
-                this.getData();
-            });
-            modal.show();
-        });
-```
 2. Переделано создание запросов
 ```js
 async getData() {
